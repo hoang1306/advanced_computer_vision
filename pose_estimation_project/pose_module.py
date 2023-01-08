@@ -4,17 +4,30 @@ import time
 
 
 class PoseDetector():
-    def __init__(self, mode=False, up_body=False, smooth=True, detection_con=0.5, track_con=0.5):
+    def __init__(self, mode=False,
+                 model_complexity=1,
+                 smooth_landmarks=True,
+                 enable_segmentation=False,
+                 smooth_segmentation=True,
+                 min_detection_confidence=0.5,
+                 min_tracking_confidence=0.5):
         self.mode = mode
-        self.up_body = up_body
-        self.smooth = smooth
-        self.detection_con = detection_con
-        self.track_con = track_con
+        self.model_complexity = model_complexity
+        self.smooth_landmarks = smooth_landmarks
+        self.enable_segmentation = enable_segmentation
+        self.smooth_segmentation = smooth_segmentation
+        self.min_detection_confidence = min_detection_confidence
+        self.min_tracking_confidence = min_tracking_confidence
 
         self.mp_draw = mp.solutions.drawing_utils
         self.mp_pose = mp.solutions.pose
-        # self.pose = self.mp_pose.Pose(self.mode, self.up_body, self.smooth, self.detection_con, self.track_con)
-        self.pose = self.mp_pose.Pose()
+        self.pose = self.mp_pose.Pose(self.mode,
+                                      self.model_complexity,
+                                      self.smooth_landmarks,
+                                      self.enable_segmentation,
+                                      self.smooth_segmentation,
+                                      self.min_detection_confidence,
+                                      self.min_tracking_confidence)
 
     def find_pose(self, img, draw=True):
         img_rgb = cv.cvtColor(img, cv.COLOR_BGR2RGB)
@@ -37,31 +50,3 @@ class PoseDetector():
                 if draw:
                     cv.circle(img, (cx, cy), 3, (255, 0, 2), cv.FILLED)
         return lm_list
-
-# def main():
-#     cap = cv.VideoCapture('../videos/1.mp4')
-#     p_time = 0
-#     detector = PoseDetector()
-#     while True:
-#         success, img = cap.read()
-#         scale_percent = 40
-#         width = int(img.shape[1] * scale_percent / 100)
-#         height = int(img.shape[0] * scale_percent / 100)
-#         dim = (width, height)
-#         img = cv.resize(img, dim, interpolation=cv.INTER_AREA)
-#         img = detector.find_pose(img)
-#         lm_list= detector.find_position(img, draw=False)
-#         if len(lm_list) != 0:
-#             print(lm_list[14])
-#             cv.circle(img, (lm_list[14][1], lm_list[14][2]), 3, (255, 0, 2), cv.FILLED)
-#         c_time = time.time()
-#         fps = 1/(c_time - p_time)
-#         p_time = c_time
-#         cv.putText(img, str(int(fps)), (70, 50),
-#                 cv.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
-#         cv.imshow("image", img)
-#         cv.waitKey(1)
-
-
-# if __name__ == "__main__":
-#     main()

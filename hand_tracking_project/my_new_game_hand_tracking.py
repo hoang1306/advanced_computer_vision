@@ -13,8 +13,8 @@ while True:
     lm_list = detector.find_position(img)
     # lm_list = detector.find_position(img, draw=False)
 
-    if len(lm_list) != 0:
-        print(lm_list[2])
+    # if len(lm_list) != 0:
+    #     print(lm_list[2])
 
     c_time = time.time()
     fps = 1/(c_time-p_time)

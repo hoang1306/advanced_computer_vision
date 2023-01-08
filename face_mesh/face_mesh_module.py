@@ -4,18 +4,25 @@ import time
 
 
 class FaceMeshDetector():
-    def __init__(self, static_mode=False, max_faces=2, min_detection_con=0.5, min_track_con=0.5):
+    def __init__(self, static_mode=False,
+                 max_faces=1,
+                 refine_landmarks=False,
+                 min_detection_confidence=0.5,
+                 min_tracking_confidence=0.5):
         self.static_mode = static_mode
         self.max_faces = max_faces
-        self.min_detection_con = min_detection_con
-        self.min_track_con = min_track_con
+        self.refine_landmarks = refine_landmarks
+        self.min_detection_confidence = min_detection_confidence
+        self.min_tracking_confidence = min_tracking_confidence
 
         self.mp_draw = mp.solutions.drawing_utils
         self.mp_face_mesh = mp.solutions.face_mesh
         # max_num_faces=2 => number person
-        self.face_mesh = self.mp_face_mesh.FaceMesh(self.static_mode)
-        # self.face_mesh = self.mp_face_mesh.FaceMesh(self.static_mode, self.max_faces,
-        #                                             self.min_detection_con, self.min_track_con)
+        self.face_mesh = self.mp_face_mesh.FaceMesh(self.static_mode,
+                                                    self.max_faces,
+                                                    self.refine_landmarks,
+                                                    self.min_detection_confidence,
+                                                    self.min_tracking_confidence)
         self.draw_spec = self.mp_draw.DrawingSpec(thickness=1, circle_radius=1)
 
     def find_face_mesh(self, img, draw=True):
@@ -48,8 +55,8 @@ def main():
     while True:
         success, img = cap.read()
         img, faces = detector.find_face_mesh(img, True)
-        if len(faces) != 0:
-            print(len(faces))
+        # if len(faces) != 0:
+        #     print(len(faces))
         c_time = time.time()
         fps = 1/(c_time-p_time)
         p_time = c_time
