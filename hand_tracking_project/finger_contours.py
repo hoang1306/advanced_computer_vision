@@ -16,7 +16,6 @@ over_lay_list = []
 
 for img_path in my_list:
     image = cv.imread(f'{folder_path}/{img_path}')
-    # print(f'{folder_path}/{img_path}')
     over_lay_list.append(image)
 
 p_time = 0
@@ -30,7 +29,6 @@ while True:
     success, img = cap.read()
     img = detector.find_hands(img)
     lm_list = detector.find_position(img, draw=False)
-    # print(lm_list)
     if len(lm_list) != 0:
         fingers = []
         # thumb
@@ -44,15 +42,14 @@ while True:
                 fingers.append(1)
             else:
                 fingers.append(0)
-        # print(fingers)
         total_fingers = fingers.count(1)
-        # print(total_fingers)
 
         h, w, c = over_lay_list[total_fingers-1].shape
         img[0:h, 0:w] = over_lay_list[total_fingers-1]
 
-        cv.rectangle(img, (20, 225),(170, 425),(0, 255, 0), cv.FILLED)
-        cv.putText(img, str(total_fingers), (45, 375), cv.FONT_HERSHEY_PLAIN, 10, (255, 0, 0), 25)
+        cv.rectangle(img, (20, 225), (170, 425), (0, 255, 0), cv.FILLED)
+        cv.putText(img, str(total_fingers), (45, 375),
+                   cv.FONT_HERSHEY_PLAIN, 10, (255, 0, 0), 25)
 
     c_time = time.time()
     fps = 1/(c_time-p_time)
@@ -62,4 +59,3 @@ while True:
     cv.imshow("img", img)
     if cv.waitKey(20) & 0xFF == ord('q'):
         break
-    # cv.waitKey(1)

@@ -15,13 +15,8 @@ while True:
 
     img_rgb = cv.cvtColor(img, cv.COLOR_BGR2RGB)
     results = face_detection.process(img_rgb)
-    # print(results)
     if results.detections:
         for id, detection in enumerate(results.detections):
-            # mp_draw.draw_detection(img, detection)
-            # print(id,detection)
-            # print(detection.score)
-            # print(detection.location_data.relative_bounding_box)
             bbox_c = detection.location_data.relative_bounding_box
             ih, iw, ic = img.shape
             bbox = int(bbox_c.xmin*iw), int(bbox_c.ymin*ih), \

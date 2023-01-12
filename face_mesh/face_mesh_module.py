@@ -36,12 +36,10 @@ class FaceMeshDetector():
                                                 self.draw_spec, self.draw_spec)
                 face = []
                 for id, lm in enumerate(face_lms.landmark):
-                    # print(lm)
                     ih, iw, ic = img.shape
                     x, y = int(lm.x*iw), int(lm.y*ih)
                     # cv.putText(img, str(id), (x, y),
                     #            cv.FONT_HERSHEY_PLAIN, 0.5, (255, 255, 0), 1)
-                    # print(id, x, y)
                     face.append([x, y])
                 faces.append(face)
 
@@ -55,8 +53,6 @@ def main():
     while True:
         success, img = cap.read()
         img, faces = detector.find_face_mesh(img, True)
-        # if len(faces) != 0:
-        #     print(len(faces))
         c_time = time.time()
         fps = 1/(c_time-p_time)
         p_time = c_time

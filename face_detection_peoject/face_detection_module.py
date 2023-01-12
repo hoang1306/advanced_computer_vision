@@ -14,7 +14,6 @@ class FaceDetector():
     def find_faces(self, img, draw=True):
         img_rgb = cv.cvtColor(img, cv.COLOR_BGR2RGB)
         self.results = self.face_detection.process(img_rgb)
-        # print(self.results)
         bboxs = []
         if self.results.detections:
             for id, detection in enumerate(self.results.detections):
@@ -59,7 +58,6 @@ def main():
         success, img = cap.read()
         # img, bboxs = detector.find_faces(img, False)
         img, bboxs = detector.find_faces(img, True)
-        print(bboxs)
         c_time = time.time()
         fps = 1/(c_time - p_time)
         p_time = c_time

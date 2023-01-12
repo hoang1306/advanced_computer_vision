@@ -18,13 +18,11 @@ while True:
     img = cv.resize(img, dim, interpolation=cv.INTER_AREA)
     img_rgb = cv.cvtColor(img, cv.COLOR_BGR2RGB)
     results = pose.process(img_rgb)
-    # print(results.pose_landmarks)
     if results.pose_landmarks:
         mp_draw.draw_landmarks(
             img, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
         for id, lm in enumerate(results.pose_landmarks.landmark):
             h, w, c = img.shape
-            print(id, lm)
             cx, cy = int(lm.x*w), int(lm.y*h)
             cv.circle(img, (cx, cy), 3, (255, 0, 2), cv.FILLED)
 

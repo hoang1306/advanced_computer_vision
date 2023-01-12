@@ -19,7 +19,6 @@ class HandDetector():
     def find_hands(self, img, draw=True):
         img_rgb = cv.cvtColor(img, cv.COLOR_BGR2RGB)
         self.results = self.hands.process(img_rgb)
-        # print(results.multi_hand_landmarks)
         if self.results.multi_hand_landmarks:
             for hand_lms in self.results.multi_hand_landmarks:
                 if draw:
@@ -32,10 +31,8 @@ class HandDetector():
         if self.results.multi_hand_landmarks:
             my_hand = self.results.multi_hand_landmarks[hands_number]
             for id, lm in enumerate(my_hand.landmark):
-                # print(id, lm)
                 h, w, c = img.shape
                 cx, cy = int(lm.x*w), int(lm.y*h)
-                # print(id, cx, cy)
                 lm_list.append([id, cx, cy])
                 if draw:
                     cv.circle(img, (cx, cy), 6, (255, 0, 0), cv.FILLED)

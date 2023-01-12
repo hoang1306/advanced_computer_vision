@@ -14,14 +14,11 @@ while True:
     success, img = cap.read()
     img_rgb = cv.cvtColor(img, cv.COLOR_BGR2RGB)
     results = hands.process(img_rgb)
-    # print(results.multi_hand_landmarks)
     if results.multi_hand_landmarks:
         for hand_lms in results.multi_hand_landmarks:
             for id, lm in enumerate(hand_lms.landmark):
-                # print(id, lm)
                 h, w, c = img.shape
                 cx, cy = int(lm.x*w), int(lm.y*h)
-                print(id, cx, cy)
                 # cv.circle(img, (cx, cy), 10, (255, 0, 255), cv.FILLED)
                 cv.circle(img, (cx, cy), 6, (255//(id+1), id, id*8), cv.FILLED)
             mp_draw.draw_landmarks(img, hand_lms, mp_hands.HAND_CONNECTIONS)

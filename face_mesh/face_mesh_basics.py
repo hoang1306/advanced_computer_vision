@@ -21,10 +21,8 @@ while True:
             mp_draw.draw_landmarks(img, face_lms, mp_face_mesh.FACEMESH_CONTOURS,
                                    draw_spec, draw_spec)
             for id, lm in enumerate(face_lms.landmark):
-                print(lm)
                 ih, iw, ic = img.shape
                 x, y = int(lm.x*iw), int(lm.y*ih)
-                print(id, x, y)
 
     c_time = time.time()
     fps = 1/(c_time-p_time)
