@@ -10,6 +10,7 @@ class HandDetector():
         self.model_complexity = model_complexity
         self.detection_con = detection_con
         self.track_con = track_con
+        self.tip_ids = [4, 8, 12, 16, 20]
 
         self.mp_hands = mp.solutions.hands
         self.hands = self.mp_hands.Hands(
@@ -27,13 +28,28 @@ class HandDetector():
         return img
 
     def find_position(self, img, hands_number=0, draw=True):
-        lm_list = []
+        self.lm_list = []
         if self.results.multi_hand_landmarks:
             my_hand = self.results.multi_hand_landmarks[hands_number]
             for id, lm in enumerate(my_hand.landmark):
                 h, w, c = img.shape
                 cx, cy = int(lm.x*w), int(lm.y*h)
-                lm_list.append([id, cx, cy])
+                self.lm_list.append([id, cx, cy])
                 if draw:
                     cv.circle(img, (cx, cy), 6, (255, 0, 0), cv.FILLED)
-        return lm_list
+        return self.lm_list
+
+    def fingers_up(self):
+        fingers = []
+        # thumb
+        if self.lm_list[self.tip_ids[0]][1] < self.lm_list[self.tip_ids[0]-1][1]:
+            fingers.append(1)
+        else:
+            fingers.append(0)
+        # 4 fingers
+        for id in range(1, 5):
+            if self.lm_list[self.tip_ids[id]][2] < self.lm_list[self.tip_ids[id]-2][2]:
+                fingers.append(1)
+            else:
+                fingers.append(0)
+        return fingers
